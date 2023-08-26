@@ -24,9 +24,21 @@ class App extends Component {
 		number: PropTypes.string,
 	};
 
-	componentDidMount = () => {};
+	componentDidMount = () => {
+		try {
+			const savedContacts = JSON.parse(localStorage.getItem('contacts'));
+			if (savedContacts) {
+				this.setState({ contacts: savedContacts, filter: '' });
+			}
+		} catch (error) {
+			console.log('🚀', error);
+		}
+	};
 
-	componentDidUpdate = () => {};
+	componentDidUpdate = () => {
+		const savedContacts = this.state.contacts;
+		localStorage.setItem('contacts', JSON.stringify(savedContacts));
+	};
 
 	handlerOnChange = ({ target }) => {
 		this.setState({
