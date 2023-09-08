@@ -40,12 +40,6 @@ class App extends Component {
 		localStorage.setItem('contacts', JSON.stringify(savedContacts));
 	};
 
-	handlerOnChange = ({ target }) => {
-		this.setState({
-			[target.name]: target.value,
-		});
-	};
-
 	handlerOnFitred = ({ target }) => {
 		this.setState({
 			[target.name]: target.value,
