@@ -2,6 +2,8 @@
 
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as yup from 'yup';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import './style.css';
 
 class ContactForm extends Component {
@@ -13,6 +15,11 @@ class ContactForm extends Component {
 	static propTypes = {
 		onSubmitForm: PropTypes.func.isRequired,
 	};
+
+	schema = yup.object({
+		name: yup.string().min(2).required('Name is required'),
+		number: yup.string().min(6).max(10).required('Number is required'),
+	});
 
 	handlerOnChange = ({ target }) => {
 		this.setState({
@@ -27,7 +34,18 @@ class ContactForm extends Component {
 
 	handleSubmit = e => {
 		e.preventDefault();
-		this.props.onSubmitForm(this.state).then(res => this.setState(res));
+
+		const validateObj = { name: this.state.name, number: this.state.number };
+
+		this.schema
+			.validate(validateObj)
+			.then(() => {
+				const res = this.props.onSubmitForm(this.state);
+				this.setState(res);
+			})
+			.catch(validationErrors => {
+				Notify.failure(`Error: ${validationErrors.errors}`);
+			});
 	};
 
 	render() {
