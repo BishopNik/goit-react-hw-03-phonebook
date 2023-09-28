@@ -23,7 +23,7 @@ class App extends Component {
 		try {
 			const savedContacts = JSON.parse(localStorage.getItem('contacts'));
 			if (savedContacts) {
-				this.setState({ contacts: savedContacts, filter: '' });
+				this.setState({ contacts: savedContacts });
 			}
 		} catch (error) {
 			console.log('🚀', error);
@@ -31,8 +31,12 @@ class App extends Component {
 	};
 
 	componentDidUpdate = () => {
-		const savedContacts = this.state.contacts;
-		localStorage.setItem('contacts', JSON.stringify(savedContacts));
+		const savedContacts = JSON.stringify(this.state.contacts);
+		const localContacts = localStorage.getItem('contacts');
+		const matchingСontacts = savedContacts === localContacts;
+		if (!matchingСontacts) {
+			localStorage.setItem('contacts', savedContacts);
+		}
 	};
 
 	handlerOnFiltred = ({ target }) => {
